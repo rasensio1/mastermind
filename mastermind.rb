@@ -47,7 +47,7 @@ def guess_again(ans)
     puts "Too Long"
     play_game
   elsif guess == ans
-    end_game
+    end_game(ans)
   else
     puts "Nope!, guess again"
     binding.pry
@@ -78,8 +78,8 @@ def correct_positions(ans, guess)
   end.size
 end
 
-def end_game
-  puts "Congratulations! You guessed the sequence 'GRRB' in #{@guesses} guesses over #{time_taken}seconds."
+def end_game(ans)
+  puts "Congratulations! You guessed the sequence '#{ans}' in #{@guesses} guesses over #{time_taken}seconds."
   puts "Do you want to (p)lay again or (q)uit?"
   response = gets.chomp.downcase
   if response == 'play' || response == 'p' 
