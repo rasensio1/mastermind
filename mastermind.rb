@@ -6,31 +6,51 @@ puts "Welcome to MASTERMIND"
 def game_input
   puts "Would you like to (p)lay, read the (i)nstructions, or (q)uit?"
   command = gets.chomp.downcase
+  binding.pry
 
-  case command
-  when 'p'
-    play_game
-  when 'q'
-    exit_game 
-  when 'i'
-    display_instructions
-  else
-    puts "Please enter a valid command"
-    game_input
-  end
+  a = {q: exit_game, p: choose_difficulty, i: instructions }
+  a.default = valid_command
+  a[command].call
+
 end
 
-def display_instructions
+def valid_command
+  puts "Please enter a valid command"
+  game_input
+end
+
+def instructions
   puts "I create a random sequence of lettters (four long). You try to guess it. I'll keep track or your number of guesses and the time it took you to solve it"
 end
 
-def play_game
+def choose_difficulty
+  puts "Would you like to play the (e)asy, (m)edium or (h)ard mode?"
+  mode = gets
+  play_game(mode)
+end
+
+def play_game(mode)
+  puts mode_intro(mode)
+
   @guesses = 0
   @start_time = Time.now
   ans = generate_ans
-  puts"I have generated a beginner sequence with four elements made up of: (r)ed, (g)reen, (b)lue, and (y)ellow. Use (q)uit at any time to end the game.  What's your guess?"
 
   guess_again(ans)
+end
+
+def mode_intro(mode)
+  "I have generated a beginner sequence with #{mode_elements(mode).size} elements made up of: #{mode_elements(mode)}. Use (q)uit at any time to end the game.  What's your guess?"
+end
+
+def mode_elements(mode)
+  if mode == 'e'
+    ["(r)ed, ", "(g)reen, ", "(b)lue,","(y)ellow"]
+  elsif mode == 'm'
+    mode_elements('e') << "(p)urple" 
+  else 
+    mode_elements('m') << "(o)range"
+  end
 end
 
 def guess_again(ans)
@@ -57,10 +77,10 @@ def guess_again(ans)
   end
 end
 
-def exit_game
+exit_game = lambda {
   puts "Exiting the game"
   exit
-end
+}
 
 def give_feedback(ans, guess)
   "you guessed #{correct_elements(ans, guess)} correct elements with #{correct_positions(ans, guess)} in the correct posision"
@@ -89,13 +109,28 @@ def end_game(ans)
   end
 end
 
-def generate_ans
+def generate_ans(mode)
   ans = []
-  4.times do
-    ans << ['r','g','b','y'].sample
+  ans_length(mode).times do
+    ans << sample(mode)
   end
   ans.join
 end
+
+def ans_length(mode)
+  {e: 4, m: 6, h: 8}[mode.to_sym]
+end
+
+def sample(mode)
+  if mode == 'e'
+    ['r','g','b','y']
+  elsif mode == 'm'
+    sample('e') << 'p'
+  else  
+    sample('m') << 'o'
+  end
+end
+
 
 def time_taken
   (Time.now - @start_time).to_i
