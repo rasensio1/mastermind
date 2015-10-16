@@ -10,13 +10,17 @@ def game_input
   when 'p'
     play_game
   when 'q'
-    quit_game
+    exit_game 
   when 'i'
     display_instructions
   else
     puts "Please enter a valid command"
     game_input
   end
+end
+
+def display_instructions
+  puts "I create a random sequence of lettters (four long). You try to guess it. I'll keep track or your number of guesses and the time it took you to solve it"
 end
 
 def play_game
