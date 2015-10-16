@@ -1,5 +1,6 @@
 require 'pry'
 puts "Welcome to MASTERMIND"
+@guesses = 0
 
 def game_input
   puts "Would you like to (p)lay, read the (i)nstructions, or (q)uit?"
@@ -19,6 +20,8 @@ def game_input
 end
 
 def play_game
+  @guesses = 0
+  @start_time = Time.now
   ans = generate_ans
   puts"I have generated a beginner sequence with four elements made up of: (r)ed, (g)reen, (b)lue, and (y)ellow. Use (q)uit at any time to end the game.  What's your guess?"
 
@@ -26,7 +29,7 @@ def play_game
 end
 
 def guess_again(ans)
-  byebug
+  binding.pry
   guess = gets.chomp.downcase
 
   if guess == 'q'
@@ -42,7 +45,9 @@ def guess_again(ans)
   elsif guess == ans
     end_game
   else
+    puts "Nope!, guess again"
     guess_again(ans)
+    @guesses += 1
   end
 end
 
@@ -52,7 +57,7 @@ def exit_game
 end
 
 def end_game
-  puts "Congratulations! You guessed the sequence 'GRRB' in 8 guesses over 4 minutes, 22 seconds."
+  puts "Congratulations! You guessed the sequence 'GRRB' in #{@guesses} guesses over #{time_taken}seconds."
   puts "Do you want to (p)lay again or (q)uit?"
   response = gets.chomp.downcase
   if response == 'play' || response == 'p' 
@@ -69,5 +74,11 @@ def generate_ans
   end
   ans.join
 end
+
+def time_taken
+  Time.now - @start_time 
+end
+
+
 
 game_input
