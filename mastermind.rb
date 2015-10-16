@@ -29,8 +29,8 @@ def play_game
 end
 
 def guess_again(ans)
-  binding.pry
   guess = gets.chomp.downcase
+  binding.pry
 
   if guess == 'q'
     exit_game
@@ -46,8 +46,8 @@ def guess_again(ans)
     end_game
   else
     puts "Nope!, guess again"
-    guess_again(ans)
     @guesses += 1
+    guess_again(ans)
   end
 end
 
@@ -76,7 +76,7 @@ def generate_ans
 end
 
 def time_taken
-  Time.now - @start_time 
+  (Time.now - @start_time).to_i
 end
 
 
