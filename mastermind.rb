@@ -1,5 +1,6 @@
 require 'pry'
 puts "Welcome to MASTERMIND"
+
 @guesses = 0
 
 def game_input
@@ -34,7 +35,6 @@ end
 
 def guess_again(ans)
   guess = gets.chomp.downcase
-  binding.pry
 
   if guess == 'q'
     exit_game
@@ -50,6 +50,8 @@ def guess_again(ans)
     end_game
   else
     puts "Nope!, guess again"
+    binding.pry
+    puts give_feedback(ans, guess)
     @guesses += 1
     guess_again(ans)
   end
@@ -58,6 +60,22 @@ end
 def exit_game
   puts "Exiting the game"
   exit
+end
+
+def give_feedback(ans, guess)
+  "you guessed #{correct_elements(ans, guess)} correct elements with #{correct_positions(ans, guess)} in the correct posision"
+end
+
+def correct_elements(ans, guess)
+  ans.chars.select { |let| guess.chars.uniq.include?(let) }.size
+end
+
+def correct_positions(ans, guess)
+  ans = ans.chars
+  guess = guess.chars
+  ans.select.with_index do |let, i|
+    let == guess[i] 
+  end.size
 end
 
 def end_game
@@ -82,7 +100,5 @@ end
 def time_taken
   (Time.now - @start_time).to_i
 end
-
-
 
 game_input
